@@ -79,7 +79,8 @@ public class infrastructure {
      * @param numbers входящий список целых чисел
      */
     static void removeEvenNumber(List<Integer> numbers) {
-
+        numbers.removeIf(x -> x % 2 == 0);
+        System.out.println(numbers);
     }
 
     /**
