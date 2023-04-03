@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class infrastructure {
 
@@ -84,11 +86,50 @@ public class infrastructure {
     }
 
     /**
-     * Удалить строки, которые являются целыми числами
-     * @param strings входящий список строк
+     * Проверка строки на соответствие целому числу
+     * через метод Integer.parseInt()
+     * @param str входящая строка
+     * @return да или нет
      */
-    static void removeIntegers(List<String> strings) {
-
+    static boolean tryParseInt(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        }
+        catch (NumberFormatException e) {
+            return false;
+        }
     }
 
+    /**
+     * Проверка строки на соответствие шаблону
+     * @param str входящая строка
+     * @param regexStr строка регулярного выражения
+     * @return да или нет
+     */
+    public static boolean matchRegex(String str, String regexStr) {
+        Pattern pattern = Pattern.compile(regexStr);
+        Matcher matcher = pattern.matcher(str);
+        return matcher.find();
+    }
+
+    /**
+     * Удалить строки, которые являются целыми числами
+     * @param strings входящий список строк
+     * @param variant метод поиска соответствия:
+     *  1 - метод Integer.parseInt
+     *  2 - регулярное выражение "-?\\d+"
+     */
+    public static void removeIntegers(List<String> strings, int variant) {
+        switch (variant) {
+            case 1 -> {
+                strings.removeIf(infrastructure::tryParseInt);
+                System.out.println(strings);
+            }
+            case 2 -> {
+                strings.removeIf(x -> infrastructure.matchRegex(x, "-?\\d+"));
+                System.out.println(strings);
+            }
+        }
+    }
 }
